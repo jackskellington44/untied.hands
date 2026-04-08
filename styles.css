@@ -1,0 +1,733 @@
+/* ===================================================
+   RESET & BASE
+=================================================== */
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html, body {
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+}
+
+body {
+  font-family: 'Arial Narrow', Arial, sans-serif;
+  font-stretch: condensed;
+  background: #fff;
+  color: #4a4a4a;
+  -webkit-font-smoothing: antialiased;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+a:hover {
+  text-decoration: underline;
+}
+
+button {
+  font-family: inherit;
+  font-size: inherit;
+  color: inherit;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0;
+}
+
+textarea, input {
+  font-family: inherit;
+  font-size: inherit;
+  color: inherit;
+}
+
+/* ===================================================
+   LANDING PAGE
+=================================================== */
+.landing {
+  width: 100vw;
+  height: 100vh;
+  background: #fff;
+  position: relative;
+  overflow: hidden;
+}
+
+.floating-buttons {
+  position: absolute;
+  bottom: 8vh;
+  right: 6vw;
+  display: flex;
+  flex-direction: row;
+  align-items: flex-end;
+  gap: 0;
+}
+
+.float-btn {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  cursor: pointer;
+  user-select: none;
+  transform: rotate(var(--rot, 0deg)) translate(var(--tx, 0px), var(--ty, 0px));
+  transition: transform 0.2s ease;
+  padding: 8px;
+}
+
+.float-btn:hover {
+  transform: rotate(var(--rot, 0deg)) translate(var(--tx, 0px), var(--ty, 0px)) scale(1.04);
+}
+
+.float-btn__img {
+  transition: opacity 0.35s ease;
+  line-height: 0;
+}
+
+.float-btn__label {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.85rem;
+  letter-spacing: 0.06em;
+  color: #4a4a4a;
+  opacity: 0;
+  transition: opacity 0.35s ease;
+  text-align: center;
+  padding: 4px;
+  pointer-events: none;
+}
+
+/* Hover effect: hide SVG, show label */
+.float-btn:not(.float-btn--secret):hover .float-btn__img {
+  opacity: 0;
+}
+
+.float-btn:not(.float-btn--secret):hover .float-btn__label {
+  opacity: 1;
+}
+
+/* Secret button: no hover effect */
+.float-btn--secret .float-btn__img {
+  opacity: 1 !important;
+}
+
+.float-btn--secret .float-btn__label {
+  opacity: 0 !important;
+}
+
+/* ===================================================
+   OVERLAYS
+=================================================== */
+.overlay {
+  position: fixed;
+  inset: 0;
+  width: 100vw;
+  height: 100vh;
+  background: #fff;
+  z-index: 100;
+  overflow-y: auto;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.4s ease;
+}
+
+.overlay.is-open {
+  opacity: 1;
+  pointer-events: all;
+}
+
+.overlay__close {
+  position: fixed;
+  top: 28px;
+  right: 32px;
+  font-size: 1.6rem;
+  line-height: 1;
+  color: #4a4a4a;
+  opacity: 0.5;
+  transition: opacity 0.2s;
+  z-index: 110;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 4px 8px;
+}
+
+.overlay__close:hover {
+  opacity: 1;
+}
+
+.overlay__close--dark {
+  color: #fff;
+  opacity: 0.7;
+  mix-blend-mode: difference;
+}
+
+/* ===================================================
+   OVERLAY CONTENT POSITIONING
+=================================================== */
+.overlay__content {
+  padding: 72px 80px 80px;
+  max-width: 520px;
+}
+
+/* Mobile */
+@media (max-width: 640px) {
+  .overlay__content {
+    padding: 80px 28px 60px;
+    margin: 0 auto;
+    max-width: 100%;
+  }
+}
+
+/* ===================================================
+   TOGGLE HEADER (waitlist / booking, about / rules)
+=================================================== */
+.toggle-header {
+  font-size: 1.5rem;
+  font-weight: normal;
+  letter-spacing: 0.03em;
+  margin-bottom: 40px;
+  color: #4a4a4a;
+  white-space: nowrap;
+}
+
+.toggle-header--sub {
+  font-size: 1rem;
+  margin-top: 28px;
+  margin-bottom: 28px;
+}
+
+.toggle-btn {
+  font-size: inherit;
+  font-weight: normal;
+  letter-spacing: inherit;
+  color: #4a4a4a;
+  transition: color 0.2s ease;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0;
+  font-family: inherit;
+}
+
+.toggle-btn:hover,
+.toggle-btn.active {
+  color: #b0aba6;
+}
+
+.toggle-sep {
+  color: #4a4a4a;
+  pointer-events: none;
+}
+
+/* ===================================================
+   FORMS
+=================================================== */
+.tab-panel {
+  display: none;
+}
+
+.tab-panel.active {
+  display: block;
+}
+
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: 32px;
+}
+
+.form-field {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+}
+
+.form-field label {
+  display: none; /* using placeholder instead */
+}
+
+.form-field input,
+.form-field textarea {
+  background: transparent;
+  border: none;
+  border-bottom: 1px solid #4a4a4a;
+  border-radius: 0;
+  outline: none;
+  padding: 6px 0 4px;
+  font-size: 0.95rem;
+  letter-spacing: 0.04em;
+  color: #4a4a4a;
+  width: 100%;
+  transition: border-color 0.2s;
+  resize: none;
+}
+
+.form-field input::placeholder,
+.form-field textarea::placeholder {
+  color: #b0aba6;
+  font-size: 0.9rem;
+}
+
+.form-field input:focus,
+.form-field textarea:focus {
+  border-bottom-color: #4a4a4a;
+  outline: none;
+}
+
+.input-trigger {
+  cursor: pointer !important;
+}
+
+.form-submit {
+  align-self: flex-start;
+  font-size: 0.85rem;
+  letter-spacing: 0.1em;
+  color: #4a4a4a;
+  border-bottom: 1px solid #4a4a4a;
+  padding: 2px 0;
+  transition: color 0.2s, border-color 0.2s;
+  margin-top: 8px;
+}
+
+.form-submit:hover {
+  color: #b0aba6;
+  border-bottom-color: #b0aba6;
+}
+
+/* ===================================================
+   CALENDAR MODAL
+=================================================== */
+.modal {
+  position: fixed;
+  inset: 0;
+  background: rgba(255, 255, 255, 0.92);
+  z-index: 200;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.3s ease;
+}
+
+.modal.is-open {
+  opacity: 1;
+  pointer-events: all;
+}
+
+.modal__box {
+  background: #fff;
+  border: 1px solid #ddd;
+  padding: 36px;
+  min-width: 340px;
+  max-width: 440px;
+  width: 92vw;
+  max-height: 88vh;
+  overflow-y: auto;
+}
+
+.modal__box--wide {
+  max-width: 680px;
+  min-width: 320px;
+}
+
+.modal__header {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  margin-bottom: 28px;
+}
+
+.modal__title {
+  font-size: 0.9rem;
+  letter-spacing: 0.06em;
+  color: #4a4a4a;
+}
+
+.modal__close {
+  font-size: 1.3rem;
+  color: #4a4a4a;
+  opacity: 0.5;
+  transition: opacity 0.2s;
+  background: none;
+  border: none;
+  cursor: pointer;
+  line-height: 1;
+  padding: 2px 6px;
+}
+
+.modal__close:hover {
+  opacity: 1;
+}
+
+.modal__confirm {
+  font-size: 0.85rem;
+  letter-spacing: 0.1em;
+  color: #4a4a4a;
+  border-bottom: 1px solid #4a4a4a;
+  padding: 2px 0;
+  margin-top: 28px;
+  display: inline-block;
+  transition: color 0.2s, border-color 0.2s;
+  background: none;
+  border-top: none;
+  border-left: none;
+  border-right: none;
+  cursor: pointer;
+}
+
+.modal__confirm:hover {
+  color: #b0aba6;
+  border-bottom-color: #b0aba6;
+}
+
+/* Calendar */
+.calendar {
+  user-select: none;
+}
+
+.calendar__nav {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 16px;
+}
+
+.calendar__nav-btn {
+  font-size: 1rem;
+  color: #4a4a4a;
+  opacity: 0.6;
+  padding: 4px 10px;
+  transition: opacity 0.2s;
+  background: none;
+  border: none;
+  cursor: pointer;
+}
+
+.calendar__nav-btn:hover {
+  opacity: 1;
+}
+
+.calendar__month {
+  font-size: 0.9rem;
+  letter-spacing: 0.08em;
+}
+
+.calendar__grid {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 4px;
+}
+
+.calendar__day-name {
+  text-align: center;
+  font-size: 0.72rem;
+  letter-spacing: 0.06em;
+  color: #b0aba6;
+  padding-bottom: 6px;
+}
+
+.calendar__day {
+  aspect-ratio: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.82rem;
+  cursor: pointer;
+  border-radius: 50%;
+  transition: background 0.15s, color 0.15s;
+  color: #4a4a4a;
+}
+
+.calendar__day:hover:not(.calendar__day--empty):not(.calendar__day--past) {
+  background: #f0ece8;
+}
+
+.calendar__day--selected {
+  background: #4a4a4a;
+  color: #fff;
+}
+
+.calendar__day--selected:hover {
+  background: #6a6a6a !important;
+  color: #fff;
+}
+
+.calendar__day--empty,
+.calendar__day--past {
+  cursor: default;
+  opacity: 0.25;
+}
+
+.calendar-time-pickers {
+  margin-top: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.time-picker-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font-size: 0.85rem;
+}
+
+.time-picker-row label {
+  flex: 0 0 auto;
+  color: #b0aba6;
+  font-size: 0.8rem;
+  min-width: 80px;
+}
+
+.time-picker-row select {
+  background: transparent;
+  border: none;
+  border-bottom: 1px solid #4a4a4a;
+  border-radius: 0;
+  font-family: inherit;
+  font-size: 0.85rem;
+  color: #4a4a4a;
+  outline: none;
+  padding: 3px 0;
+  cursor: pointer;
+  appearance: none;
+  -webkit-appearance: none;
+}
+
+/* Flash Grid */
+.flash-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(110px, 1fr));
+  gap: 8px;
+  max-height: 54vh;
+  overflow-y: auto;
+}
+
+.flash-thumb {
+  aspect-ratio: 1;
+  cursor: pointer;
+  position: relative;
+  overflow: hidden;
+  border: 2px solid transparent;
+  transition: border-color 0.2s;
+}
+
+.flash-thumb svg {
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+
+.flash-thumb--selected {
+  border-color: #4a4a4a;
+}
+
+.flash-thumb--selected::after {
+  content: '✓';
+  position: absolute;
+  bottom: 4px;
+  right: 5px;
+  font-size: 0.7rem;
+  color: #4a4a4a;
+  background: rgba(255,255,255,0.85);
+  width: 16px;
+  height: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+}
+
+/* ===================================================
+   CONTACT OVERLAY
+=================================================== */
+.overlay__title {
+  font-size: 2.4rem;
+  font-weight: normal;
+  letter-spacing: 0.04em;
+  margin-bottom: 12px;
+}
+
+.overlay__contact-info {
+  font-size: 0.9rem;
+  letter-spacing: 0.04em;
+  line-height: 1.8;
+  margin-bottom: 4px;
+  color: #6a6a6a;
+}
+
+.about-headshot {
+  margin-bottom: 24px;
+  line-height: 0;
+}
+
+.about-headshot svg {
+  display: block;
+}
+
+.overlay__body {
+  font-size: 0.88rem;
+  line-height: 1.85;
+  letter-spacing: 0.02em;
+  color: #5a5a5a;
+  max-width: 420px;
+}
+
+/* ===================================================
+   FLASHBOOK OVERLAY
+=================================================== */
+.overlay--flashbook {
+  overflow: hidden;
+  background: #1a1a1a;
+}
+
+.flashbook {
+  display: flex;
+  width: 100%;
+  height: 100%;
+  position: relative;
+  user-select: none;
+}
+
+.flashbook__preview {
+  flex: 0 0 50%;
+  height: 100%;
+  overflow: hidden;
+  position: relative;
+  background: #111;
+}
+
+.flashbook__preview img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.flashbook__divider {
+  flex: 0 0 4px;
+  height: 100%;
+  background: #2a2a2a;
+  cursor: col-resize;
+  position: relative;
+  z-index: 10;
+  transition: background 0.2s;
+}
+
+.flashbook__divider:hover,
+.flashbook__divider.is-dragging {
+  background: #4a4a4a;
+}
+
+.flashbook__grid-wrap {
+  flex: 1;
+  height: 100%;
+  overflow-y: auto;
+  background: #1a1a1a;
+  scrollbar-width: thin;
+  scrollbar-color: #3a3a3a #1a1a1a;
+}
+
+.flashbook__grid-wrap::-webkit-scrollbar {
+  width: 5px;
+}
+
+.flashbook__grid-wrap::-webkit-scrollbar-thumb {
+  background: #3a3a3a;
+}
+
+.flashbook__grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+  gap: 3px;
+  padding: 3px;
+}
+
+.flashbook__thumb {
+  aspect-ratio: 1;
+  cursor: pointer;
+  overflow: hidden;
+  position: relative;
+  background: #222;
+}
+
+.flashbook__thumb svg,
+.flashbook__thumb img {
+  width: 100%;
+  height: 100%;
+  display: block;
+  object-fit: cover;
+  transition: opacity 0.2s;
+}
+
+.flashbook__thumb:hover svg,
+.flashbook__thumb:hover img {
+  opacity: 0.8;
+}
+
+.flashbook__thumb--active {
+  outline: 2px solid rgba(255,255,255,0.6);
+  outline-offset: -2px;
+}
+
+/* ===================================================
+   TOAST
+=================================================== */
+.toast {
+  position: fixed;
+  bottom: 32px;
+  left: 50%;
+  transform: translateX(-50%) translateY(20px);
+  background: #4a4a4a;
+  color: #fff;
+  font-size: 0.82rem;
+  letter-spacing: 0.08em;
+  padding: 10px 24px;
+  opacity: 0;
+  transition: opacity 0.3s ease, transform 0.3s ease;
+  pointer-events: none;
+  z-index: 999;
+}
+
+.toast.is-visible {
+  opacity: 1;
+  transform: translateX(-50%) translateY(0);
+}
+
+/* ===================================================
+   RESPONSIVE
+=================================================== */
+@media (max-width: 640px) {
+  .floating-buttons {
+    bottom: 6vh;
+    right: 4vw;
+    gap: 0;
+  }
+
+  .toggle-header {
+    font-size: 1.2rem;
+  }
+
+  .overlay__title {
+    font-size: 1.9rem;
+  }
+
+  .flashbook__grid {
+    grid-template-columns: repeat(auto-fill, minmax(90px, 1fr));
+  }
+}
+
+@media (max-width: 480px) {
+  .flash-grid {
+    grid-template-columns: repeat(auto-fill, minmax(90px, 1fr));
+  }
+}
