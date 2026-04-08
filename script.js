@@ -219,7 +219,6 @@ function formatDate(d) {
 }
 
 function formatHour(h) {
-  if (h === 0 || h === 24) return '12:00 am';
   if (h === 12) return '12:00 pm';
   return h < 12 ? `${h}:00 am` : `${h - 12}:00 pm`;
 }
@@ -246,6 +245,19 @@ function confirmCalendar() {
    FLASH IMAGE PICKER
 =================================================== */
 
+// Helper: generate SVG ray lines for a sun icon centered at (cx, cy)
+function sunRays(cx, cy, innerR, outerR) {
+  const angles = [0, 30, 60, 90, 120, 150, 180, 210, 240, 270, 300, 330];
+  return angles.map(function (a) {
+    const rad = a * Math.PI / 180;
+    const x1 = Math.round((cx + innerR * Math.cos(rad)) * 100) / 100;
+    const y1 = Math.round((cy + innerR * Math.sin(rad)) * 100) / 100;
+    const x2 = Math.round((cx + outerR * Math.cos(rad)) * 100) / 100;
+    const y2 = Math.round((cy + outerR * Math.sin(rad)) * 100) / 100;
+    return `<line x1="${x1}" y1="${y1}" x2="${x2}" y2="${y2}" stroke="#4a4a4a" stroke-width="1.5" stroke-linecap="round"/>`;
+  }).join('');
+}
+
 // 12 abstract placeholder SVG flash images
 const FLASH_SVGS = [
   // 0 — crescent moon
@@ -269,7 +281,7 @@ const FLASH_SVGS = [
   // 9 — ouroboros (snake eating tail)
   `<svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg"><rect width="100" height="100" fill="#eaeae4"/><circle cx="50" cy="50" r="30" fill="none" stroke="#4a4a4a" stroke-width="7" stroke-dasharray="170 20"/><circle cx="50" cy="20" r="7" fill="#4a4a4a"/><circle cx="47" cy="17" r="1.5" fill="white"/><circle cx="53" cy="17" r="1.5" fill="white"/><line x1="45" y1="14" x2="42" y2="10" stroke="#4a4a4a" stroke-width="1.5" stroke-linecap="round"/><line x1="55" y1="14" x2="58" y2="10" stroke="#4a4a4a" stroke-width="1.5" stroke-linecap="round"/></svg>`,
   // 10 — sun with rays
-  `<svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg"><rect width="100" height="100" fill="#f5f2e8"/><circle cx="50" cy="50" r="16" fill="none" stroke="#4a4a4a" stroke-width="2"/><circle cx="50" cy="50" r="6" fill="#4a4a4a"/>${[0,30,60,90,120,150,180,210,240,270,300,330].map(a=>`<line x1="${50+22*Math.cos(a*Math.PI/180)}" y1="${50+22*Math.sin(a*Math.PI/180)}" x2="${50+34*Math.cos(a*Math.PI/180)}" y2="${50+34*Math.sin(a*Math.PI/180)}" stroke="#4a4a4a" stroke-width="1.5" stroke-linecap="round"/>`).join('')}</svg>`,
+  `<svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg"><rect width="100" height="100" fill="#f5f2e8"/><circle cx="50" cy="50" r="16" fill="none" stroke="#4a4a4a" stroke-width="2"/><circle cx="50" cy="50" r="6" fill="#4a4a4a"/>${sunRays(50, 50, 22, 34)}</svg>`,
   // 11 — minimal leaf / botanical
   `<svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg"><rect width="100" height="100" fill="#ecf0e8"/><path d="M50,85 C50,85 20,65 20,38 C20,18 35,10 50,12 C65,10 80,18 80,38 C80,65 50,85 50,85Z" fill="none" stroke="#4a4a4a" stroke-width="2"/><line x1="50" y1="85" x2="50" y2="12" stroke="#4a4a4a" stroke-width="1.2"/><line x1="50" y1="35" x2="30" y2="25" stroke="#4a4a4a" stroke-width="0.9"/><line x1="50" y1="45" x2="28" y2="40" stroke="#4a4a4a" stroke-width="0.9"/><line x1="50" y1="55" x2="30" y2="55" stroke="#4a4a4a" stroke-width="0.9"/><line x1="50" y1="65" x2="33" y2="68" stroke="#4a4a4a" stroke-width="0.9"/><line x1="50" y1="35" x2="70" y2="25" stroke="#4a4a4a" stroke-width="0.9"/><line x1="50" y1="45" x2="72" y2="40" stroke="#4a4a4a" stroke-width="0.9"/><line x1="50" y1="55" x2="70" y2="55" stroke="#4a4a4a" stroke-width="0.9"/><line x1="50" y1="65" x2="67" y2="68" stroke="#4a4a4a" stroke-width="0.9"/></svg>`,
 ];
