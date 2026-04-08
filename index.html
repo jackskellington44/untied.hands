@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>untied.hands</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+
+  <!-- ===================== LANDING PAGE ===================== -->
+  <main class="landing">
+    <div class="floating-buttons">
+
+      <!-- Booking Button -->
+      <div class="float-btn" id="btn-booking" style="--rot: -8deg; --tx: 0px; --ty: 0px;" onclick="openOverlay('booking')">
+        <div class="float-btn__img">
+          <svg viewBox="0 0 120 160" xmlns="http://www.w3.org/2000/svg" width="120" height="160">
+            <!-- Rose / abstract flash -->
+            <circle cx="60" cy="55" r="28" fill="none" stroke="#4a4a4a" stroke-width="2"/>
+            <circle cx="60" cy="55" r="18" fill="none" stroke="#4a4a4a" stroke-width="1.5"/>
+            <circle cx="60" cy="55" r="9" fill="#4a4a4a"/>
+            <ellipse cx="60" cy="55" rx="38" ry="14" fill="none" stroke="#4a4a4a" stroke-width="1" transform="rotate(45 60 55)"/>
+            <ellipse cx="60" cy="55" rx="38" ry="14" fill="none" stroke="#4a4a4a" stroke-width="1" transform="rotate(-45 60 55)"/>
+            <line x1="60" y1="83" x2="60" y2="150" stroke="#4a4a4a" stroke-width="2"/>
+            <line x1="44" y1="115" x2="60" y2="108" stroke="#4a4a4a" stroke-width="1.5"/>
+            <line x1="76" y1="120" x2="60" y2="113" stroke="#4a4a4a" stroke-width="1.5"/>
+            <ellipse cx="38" cy="118" rx="10" ry="6" fill="none" stroke="#4a4a4a" stroke-width="1.2" transform="rotate(-30 38 118)"/>
+            <ellipse cx="82" cy="123" rx="10" ry="6" fill="none" stroke="#4a4a4a" stroke-width="1.2" transform="rotate(30 82 123)"/>
+          </svg>
+        </div>
+        <div class="float-btn__label">waitlist / booking</div>
+      </div>
+
+      <!-- Contact Button -->
+      <div class="float-btn" id="btn-contact" style="--rot: 6deg; --tx: 30px; --ty: 20px;" onclick="openOverlay('contact')">
+        <div class="float-btn__img">
+          <svg viewBox="0 0 100 160" xmlns="http://www.w3.org/2000/svg" width="100" height="160">
+            <!-- Dagger flash -->
+            <polygon points="50,5 58,30 50,35 42,30" fill="#4a4a4a"/>
+            <rect x="46" y="35" width="8" height="95" fill="none" stroke="#4a4a4a" stroke-width="2"/>
+            <line x1="46" y1="35" x2="54" y2="35" stroke="#4a4a4a" stroke-width="2"/>
+            <rect x="46" y="130" width="8" height="18" rx="4" fill="#4a4a4a"/>
+            <line x1="35" y1="78" x2="65" y2="78" stroke="#4a4a4a" stroke-width="2"/>
+            <line x1="32" y1="82" x2="68" y2="82" stroke="#4a4a4a" stroke-width="1"/>
+          </svg>
+        </div>
+        <div class="float-btn__label">contact / rules</div>
+      </div>
+
+      <!-- Flashbook Button (SECRET) -->
+      <div class="float-btn float-btn--secret" id="btn-flashbook" style="--rot: -3deg; --tx: 60px; --ty: -15px;" onclick="openOverlay('flashbook')">
+        <div class="float-btn__img">
+          <svg viewBox="0 0 130 130" xmlns="http://www.w3.org/2000/svg" width="130" height="130">
+            <!-- Snake flash -->
+            <path d="M65,10 C90,10 110,30 110,55 C110,80 90,95 65,95 C40,95 25,80 20,65 C15,50 25,35 40,30 C55,25 70,38 65,50 C60,62 48,65 42,58" fill="none" stroke="#4a4a4a" stroke-width="2.5" stroke-linecap="round"/>
+            <ellipse cx="65" cy="10" rx="7" ry="5" fill="#4a4a4a"/>
+            <line x1="60" y1="8" x2="55" y2="3" stroke="#4a4a4a" stroke-width="1.5" stroke-linecap="round"/>
+            <line x1="70" y1="8" x2="75" y2="3" stroke="#4a4a4a" stroke-width="1.5" stroke-linecap="round"/>
+            <circle cx="62" cy="8" r="1.5" fill="white"/>
+            <circle cx="68" cy="8" r="1.5" fill="white"/>
+            <path d="M42,58 C35,50 30,55 28,62 C26,70 30,78 38,80" fill="none" stroke="#4a4a4a" stroke-width="2.5" stroke-linecap="round"/>
+          </svg>
+        </div>
+        <div class="float-btn__label"></div>
+      </div>
+
+    </div>
+  </main>
+
+  <!-- ===================== OVERLAY: BOOKING ===================== -->
+  <div class="overlay" id="overlay-booking" role="dialog" aria-modal="true" aria-label="Waitlist / Booking">
+    <button class="overlay__close" onclick="closeOverlay('booking')" aria-label="Close">&times;</button>
+    <div class="overlay__content">
+
+      <h1 class="toggle-header">
+        <button class="toggle-btn active" id="tab-waitlist" onclick="switchTab('waitlist')">waitlist</button>
+        <span class="toggle-sep"> / </span>
+        <button class="toggle-btn" id="tab-booking-form" onclick="switchTab('booking')">booking</button>
+      </h1>
+
+      <!-- Waitlist Form -->
+      <form class="form tab-panel active" id="panel-waitlist" onsubmit="handleSubmit(event, 'waitlist')">
+        <div class="form-field">
+          <input type="text" id="wl-city" name="city" placeholder="city" required autocomplete="off" />
+          <label for="wl-city">city</label>
+        </div>
+        <div class="form-field">
+          <input type="text" id="wl-name" name="name" placeholder="name" required autocomplete="off" />
+          <label for="wl-name">name</label>
+        </div>
+        <div class="form-field">
+          <input type="email" id="wl-email" name="email" placeholder="email" required autocomplete="off" />
+          <label for="wl-email">email</label>
+        </div>
+        <button type="submit" class="form-submit">submit</button>
+      </form>
+
+      <!-- Booking Form -->
+      <form class="form tab-panel" id="panel-booking-form" onsubmit="handleSubmit(event, 'booking')">
+        <div class="form-field">
+          <input type="text" id="bk-name" name="name" placeholder="name" required autocomplete="off" />
+          <label for="bk-name">name</label>
+        </div>
+        <div class="form-field">
+          <input type="email" id="bk-email" name="email" placeholder="email" required autocomplete="off" />
+          <label for="bk-email">email</label>
+        </div>
+        <div class="form-field">
+          <input type="text" id="bk-avail" name="availabilities" placeholder="availabilities"
+                 readonly class="input-trigger" onclick="openCalendar()" />
+          <label for="bk-avail">availabilities</label>
+        </div>
+        <div class="form-field">
+          <input type="text" id="bk-flash" name="flash" placeholder="flash"
+                 readonly class="input-trigger" onclick="openFlashPicker()" />
+          <label for="bk-flash">flash</label>
+        </div>
+        <div class="form-field">
+          <textarea id="bk-info" name="info" placeholder="additional info" rows="3"></textarea>
+          <label for="bk-info">additional info</label>
+        </div>
+        <button type="submit" class="form-submit">submit</button>
+      </form>
+
+    </div>
+  </div>
+
+  <!-- Calendar Picker Modal -->
+  <div class="modal" id="modal-calendar" role="dialog" aria-modal="true" aria-label="Select availabilities">
+    <div class="modal__box">
+      <div class="modal__header">
+        <span class="modal__title">select up to 2 dates</span>
+        <button class="modal__close" onclick="closeCalendar()" aria-label="Close">&times;</button>
+      </div>
+      <div class="calendar" id="calendar">
+        <!-- Rendered by JS -->
+      </div>
+      <div class="calendar-time-pickers" id="calendar-time-pickers">
+        <!-- Time pickers rendered by JS -->
+      </div>
+      <button class="modal__confirm" onclick="confirmCalendar()">confirm</button>
+    </div>
+  </div>
+
+  <!-- Flash Picker Modal -->
+  <div class="modal" id="modal-flash" role="dialog" aria-modal="true" aria-label="Select flash">
+    <div class="modal__box modal__box--wide">
+      <div class="modal__header">
+        <span class="modal__title">select 1–4 flash images</span>
+        <button class="modal__close" onclick="closeFlashPicker()" aria-label="Close">&times;</button>
+      </div>
+      <div class="flash-grid" id="flash-grid">
+        <!-- Rendered by JS -->
+      </div>
+      <button class="modal__confirm" onclick="confirmFlash()">confirm</button>
+    </div>
+  </div>
+
+  <!-- ===================== OVERLAY: CONTACT ===================== -->
+  <div class="overlay" id="overlay-contact" role="dialog" aria-modal="true" aria-label="Contact / Rules">
+    <button class="overlay__close" onclick="closeOverlay('contact')" aria-label="Close">&times;</button>
+    <div class="overlay__content">
+
+      <h1 class="overlay__title">untied.hands</h1>
+      <p class="overlay__contact-info">
+        <a href="mailto:email@email.com">email@email.com</a><br/>
+        <a href="tel:1234445555">123-444-5555</a>
+      </p>
+
+      <h2 class="toggle-header toggle-header--sub">
+        <button class="toggle-btn active" id="tab-about" onclick="switchContactTab('about')">about</button>
+        <span class="toggle-sep"> / </span>
+        <button class="toggle-btn" id="tab-rules" onclick="switchContactTab('rules')">rules</button>
+      </h2>
+
+      <!-- About Panel -->
+      <div class="tab-panel active" id="panel-about">
+        <div class="about-headshot">
+          <svg viewBox="0 0 200 240" xmlns="http://www.w3.org/2000/svg" width="200" height="240">
+            <rect width="200" height="240" rx="4" fill="#e8e4df"/>
+            <ellipse cx="100" cy="95" rx="40" ry="48" fill="#c9b99a"/>
+            <ellipse cx="100" cy="95" rx="32" ry="40" fill="#d4c4a8"/>
+            <rect x="50" y="170" width="100" height="70" rx="6" fill="#c9b99a"/>
+            <ellipse cx="88" cy="85" rx="5" ry="6" fill="#5a4a3a"/>
+            <ellipse cx="112" cy="85" rx="5" ry="6" fill="#5a4a3a"/>
+            <path d="M88,108 Q100,118 112,108" fill="none" stroke="#7a5a4a" stroke-width="2" stroke-linecap="round"/>
+            <path d="M78,75 Q88,68 98,73" fill="none" stroke="#7a5a4a" stroke-width="1.5" stroke-linecap="round"/>
+            <path d="M102,73 Q112,68 122,75" fill="none" stroke="#7a5a4a" stroke-width="1.5" stroke-linecap="round"/>
+          </svg>
+        </div>
+        <p class="overlay__body">
+          Based between cities, I work in fine-line black and grey with an eye for the delicate and the strange.
+          Heavily influenced by botanical illustration, antique medical diagrams, and the quiet weight of things
+          that outlast us. Every piece is drawn freehand to your body — no stencil, no sticker. My work tends
+          toward the intimate and the minimal: a single stem, a moth, a hand reaching for something just
+          out of frame. I've been tattooing for eight years and I still find it astonishing every time.
+          Inquiries open when they open.
+        </p>
+      </div>
+
+      <!-- Rules Panel -->
+      <div class="tab-panel" id="panel-rules">
+        <p class="overlay__body">
+          <strong>deposits</strong><br/>
+          A non-refundable deposit of $100 is required to hold your appointment. This goes toward the final price.
+          Deposits are forfeited if you cancel within 48 hours of your appointment or no-show.<br/><br/>
+
+          <strong>reschedules</strong><br/>
+          One reschedule is allowed with at least 72 hours notice. Additional reschedules may require a new deposit.<br/><br/>
+
+          <strong>design</strong><br/>
+          I design everything from scratch based on our consultation. I do not copy other artists' work. Reference
+          images are welcome and helpful. Final design is revealed at the appointment — no previews sent in advance.<br/><br/>
+
+          <strong>placement</strong><br/>
+          I reserve the right to decline placements I don't feel are suited to the design. Please come to your
+          appointment with the area clean and accessible.<br/><br/>
+
+          <strong>touch-ups</strong><br/>
+          One complimentary touch-up is included within three months of your appointment. Touch-ups after that
+          are priced at an hourly rate.<br/><br/>
+
+          <strong>age</strong><br/>
+          18+ only. No exceptions.
+        </p>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ===================== OVERLAY: FLASHBOOK ===================== -->
+  <div class="overlay overlay--flashbook" id="overlay-flashbook" role="dialog" aria-modal="true" aria-label="Flashbook">
+    <button class="overlay__close overlay__close--dark" onclick="closeOverlay('flashbook')" aria-label="Close">&times;</button>
+
+    <div class="flashbook" id="flashbook">
+      <div class="flashbook__preview" id="flashbook-preview">
+      </div>
+
+      <div class="flashbook__divider" id="flashbook-divider"></div>
+
+      <div class="flashbook__grid-wrap">
+        <div class="flashbook__grid" id="flashbook-grid">
+          <!-- Rendered by JS -->
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Success Toast -->
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+  <script src="script.js"></script>
+</body>
+</html>
