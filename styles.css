@@ -115,11 +115,11 @@ textarea, input {
 
 /* Secret button: no hover effect */
 .float-btn--secret .float-btn__img {
-  opacity: 1 !important;
+  opacity: 1;
 }
 
 .float-btn--secret .float-btn__label {
-  opacity: 0 !important;
+  opacity: 0;
 }
 
 /* ===================================================
@@ -283,7 +283,7 @@ textarea, input {
 }
 
 .input-trigger {
-  cursor: pointer !important;
+  cursor: pointer;
 }
 
 .form-submit {
@@ -457,7 +457,7 @@ textarea, input {
 }
 
 .calendar__day--selected:hover {
-  background: #6a6a6a !important;
+  background: #6a6a6a;
   color: #fff;
 }
 

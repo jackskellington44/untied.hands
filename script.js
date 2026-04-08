@@ -195,9 +195,7 @@ function renderTimePickers() {
 
   const hours = [];
   for (let h = 9; h <= 20; h++) {
-    const ampm = h < 12 ? 'am' : 'pm';
-    const label = h <= 12 ? h : h - 12;
-    hours.push(`<option value="${h}">${label}:00 ${ampm}</option>`);
+    hours.push(`<option value="${h}">${formatHour(h)}</option>`);
   }
 
   let html = '';
@@ -220,6 +218,12 @@ function formatDate(d) {
   return `${MONTH_NAMES[d.getMonth()]} ${d.getDate()}`;
 }
 
+function formatHour(h) {
+  if (h === 0 || h === 24) return '12:00 am';
+  if (h === 12) return '12:00 pm';
+  return h < 12 ? `${h}:00 am` : `${h - 12}:00 pm`;
+}
+
 function confirmCalendar() {
   const input = document.getElementById('bk-avail');
   if (state.selectedDates.length === 0) {
@@ -231,9 +235,7 @@ function confirmCalendar() {
   const parts = state.selectedDates.map(function (d, i) {
     const timeSel = document.getElementById('time-' + i);
     const hour = timeSel ? parseInt(timeSel.value, 10) : 12;
-    const ampm = hour < 12 ? 'am' : 'pm';
-    const h = hour <= 12 ? hour : hour - 12;
-    return `${formatDate(d)} ${h}:00${ampm}`;
+    return `${formatDate(d)} ${formatHour(hour)}`;
   });
 
   input.value = parts.join(', ');
@@ -336,22 +338,27 @@ function handleSubmit(e, formName) {
 =================================================== */
 
 // 20 placeholder flashbook images (different SVG patterns)
+function scaleSVGForEmbed(svgString, x, y, width, height) {
+  // Parse and reserialize using DOM to safely set attributes
+  const parser = new DOMParser();
+  const doc = parser.parseFromString(svgString, 'image/svg+xml');
+  const svgEl = doc.querySelector('svg');
+  if (!svgEl) return svgString;
+  svgEl.setAttribute('x', String(x));
+  svgEl.setAttribute('y', String(y));
+  svgEl.setAttribute('width', String(width));
+  svgEl.setAttribute('height', String(height));
+  return new XMLSerializer().serializeToString(svgEl);
+}
+
 function generateFlashbookSVGs() {
   const svgs = [];
-  const patterns = [
-    // Dense linework variations
-    (i) => {
-      const hue = (i * 37) % 360;
-      const bg = `hsl(${hue},8%,${85 + (i % 3) * 4}%)`;
-      return `<svg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg" width="200" height="200">
-        <rect width="200" height="200" fill="${bg}"/>
-        ${FLASH_SVGS[i % FLASH_SVGS.length].replace(/width="\d+" height="\d+"/, 'width="160" height="160"').replace('<svg', '<svg x="20" y="20"')}
-      </svg>`;
-    },
-  ];
 
   for (let i = 0; i < 20; i++) {
-    svgs.push(patterns[0](i));
+    const hue = (i * 37) % 360;
+    const bg = `hsl(${hue},8%,${85 + (i % 3) * 4}%)`;
+    const inner = scaleSVGForEmbed(FLASH_SVGS[i % FLASH_SVGS.length], 20, 20, 160, 160);
+    svgs.push(`<svg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg" width="200" height="200"><rect width="200" height="200" fill="${bg}"/>${inner}</svg>`);
   }
   return svgs;
 }
@@ -392,12 +399,9 @@ function setFlashbookPreview(idx) {
   const svg = flashbookSVGs[idx];
   const preview = document.getElementById('flashbook-preview');
 
-  // Create a full-size SVG overlay
+  // Remove any existing preview SVG
   const existing = preview.querySelector('svg.preview-svg');
   if (existing) existing.remove();
-
-  const imgEl = document.getElementById('flashbook-preview-img');
-  imgEl.style.display = 'none';
 
   // Parse the SVG and render it directly, full-cover
   const wrapper = document.createElement('div');
@@ -405,7 +409,7 @@ function setFlashbookPreview(idx) {
   const svgEl = wrapper.querySelector('svg');
   if (svgEl) {
     svgEl.setAttribute('class', 'preview-svg');
-    svgEl.style.cssText = 'width:100%;height:100%;position:absolute;inset:0;object-fit:cover;';
+    svgEl.style.cssText = 'width:100%;height:100%;position:absolute;inset:0;';
     svgEl.setAttribute('preserveAspectRatio', 'xMidYMid slice');
     preview.appendChild(svgEl);
   }
